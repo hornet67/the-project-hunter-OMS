@@ -1,0 +1,8 @@
+  body { background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .card { border: none; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+    .card-header { background: linear-gradient(90deg, #4e73df, #1cc88a); padding: 20px; }
+    .card-header h4 { margin: 0; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .form-control, .form-select { border-radius: 10px; padding-left: 40px; }
+    .input-group-text { border-radius: 10px 0 0 10px; background: #f1f3f6; }
+    .btn-custom { border-radius: 12px; background: linear-gradient(90deg, #1cc88a, #36b9cc); color: white; font-weight: bold; transition: all 0.3s ease; }
+    .btn-custom:hover { background: linear-gradient(90deg, #36b9cc, #1cc88a); transform: scale(1.03); }

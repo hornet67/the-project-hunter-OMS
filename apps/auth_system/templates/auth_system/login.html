@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Login Page
+{% endblock title %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7">
+        <div class="card">
+          <div class="card-header text-white text-center">
+            <h4><i class="bi bi-box-arrow-in-right"></i> User Login</h4>
+          </div>
+          <div class="card-body p-4">
+            <form method="post">
+              {% csrf_token %}
+
+              <!-- Email -->
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                  <input type="email" name="email" class="form-control" placeholder="Enter your email" required />
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                  <input type="password" name="password" class="form-control" placeholder="Enter your password" required />
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-custom">
+                  <i class="bi bi-box-arrow-in-right"></i> Login
+                </button>
+              </div>
+
+              <!-- Register Link -->
+              <div class="col-12 mt-2 text-center">
+                <a href="{% url 'register' %}" class="btn btn-outline-secondary w-50">
+                  <i class="bi bi-box-arrow-in-right"></i> Don't have an account? Register
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
