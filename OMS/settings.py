@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.auth_system',
     'apps.user_management',
     'apps.products',
+    'apps.party_app',
     
     #packages
     'rest_framework',

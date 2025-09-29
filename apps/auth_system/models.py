@@ -33,8 +33,8 @@ class CompanyType(models.Model):
 # -------------------------
 class PendingCompany(models.Model):
     company_id = models.AutoField(primary_key=True, unique=True)
-    company_name = models.CharField(max_length=300)
-    email = models.EmailField(max_length=254)
+    company_name = models.CharField(max_length=300,unique=True)
+    email = models.EmailField(max_length=254,unique=True)
     phone_number = models.CharField(max_length=11, blank=True)
     type = models.ForeignKey(CompanyType, on_delete=models.CASCADE)
     address = models.TextField()
