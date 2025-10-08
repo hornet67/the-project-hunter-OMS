@@ -8,88 +8,89 @@
 
 {% block content %}
 <div class="d-flex" style="min-height: 100vh; position: relative;">
-  <!-- Sidebar -->
-  <div id="sidebar" class="sidebar p-3 d-flex flex-column position-relative">
-    <!-- Toggle Button -->
-    <button id="toggle-btn">☰</button>
 
-    <!-- Profile Section -->
-    <div class="profile-section mt-5 mb-3 text-center">
-      <img src="https://via.placeholder.com/70" class="rounded-circle mb-2" alt="Profile">
-      <div class="profile-name">{{ company.company_name }}</div>
-    </div>
-    <hr class="text-secondary">
-
-    <!-- Categories -->
-    <ul class="nav flex-column flex-grow-1">
-      <!-- Administration -->
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#adminDropdown" role="button" aria-expanded="false" aria-controls="adminDropdown">
-          <i class="bi bi-gear"></i> <span>Administration</span>
-        </a>
-        <div class="collapse" id="adminDropdown">
-          <ul class="nav flex-column ms-3">
-            <li class="nav-item"><a class="nav-link" href="{% url 'userrole' %}">User Role</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'branch' %}">Branch</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'userpermissions' %}">Permission</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'userinfo' %}">User Information</a></li>
-          </ul>
-        </div>
-      </li>
-
-      <!-- HR -->
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#hrDropdown" role="button" aria-expanded="false" aria-controls="hrDropdown">
-          <i class="bi bi-people"></i> <span>HR</span>
-        </a>
-        <div class="collapse" id="hrDropdown">
-          <ul class="nav flex-column ms-3">
-            <li class="nav-item"><a class="nav-link" href="#">Employee Info</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Attendance</a></li>
-          </ul>
-        </div>
-      </li>
-
-      <!-- Inventory -->
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bi bi-box-seam"></i> <span>Inventory</span></a>
-      </li>
-
-      <!-- Food -->
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#foodDropdown" role="button" aria-expanded="false" aria-controls="foodDropdown">
-          <i class="bi bi-basket"></i> <span>Food</span>
-        </a>
-        <div class="collapse" id="foodDropdown">
-          <ul class="nav flex-column ms-3">
-            <li class="nav-item"><a class="nav-link" href="#">Menu</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Orders</a></li>
-          </ul>
-        </div>
-      </li>
-    </ul>
-
-    <!-- Logout -->
-    <div class="mt-auto">
-      <hr class="text-secondary">
-      <a class="nav-link text-danger" href="{% url 'logout' %}">
-        <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
-      </a>
-    </div>
-  </div> <!-- End Sidebar -->
+  {% include 'sidebar.html' %}
 
   <!-- Main Content -->
-  <div class="content flex-grow-1 p-4">
-    <!-- Top bar -->
-    <div class="topbar mb-4 position-relative">
-      <h2>Office Management System</h2>
-      <form class="d-flex position-absolute end-0 top-0" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
-        <button class="btn btn-primary" type="submit">Search</button>
-      </form>
-    </div>
+<div class="content flex-grow-1 p-4">
+  <!-- Top bar -->
+  <div class="topbar mb-4 d-flex justify-content-between align-items-center">
+    <h2>Office Management System</h2>
 
-    <p>Welcome to the Office Management System dashboard.</p>
+    <!-- Search -->
+    <form class="d-flex" role="search" onsubmit="return false;">
+      <input id="searchInput" class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+      <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+  </div>
+
+  <!-- Add Item Button -->
+  <div class="mb-3">
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
+      + Add Item
+    </button>
+  </div>
+
+  <!-- Modal Form -->
+  <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addItemModalLabel">Add New Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addItemForm">
+            <div class="mb-3">
+              <label for="itemName" class="form-label">Item Name</label>
+              <input type="text" class="form-control" id="itemName" placeholder="Enter item name" required>
+            </div>
+            <div class="mb-3">
+              <label for="itemCategory" class="form-label">Category</label>
+              <select class="form-select" id="itemCategory" required>
+                <option value="">Select Category</option>
+                <option value="Administration">Administration</option>
+                <option value="HR">HR</option>
+                <option value="Inventory">Inventory</option>
+                <option value="Food">Food</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Item</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table for displaying data -->
+  <div class="mt-4">
+    <table class="table table-striped" id="itemsTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Item Name</th>
+          <th>Category</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Example row -->
+        <tr>
+          <td>1</td>
+          <td>Example Item</td>
+          <td>Inventory</td>
+          <td>
+            <button class="btn btn-sm btn-warning">Edit</button>
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
 
     <!-- Toast Container -->
     <div aria-live="polite" aria-atomic="true" class="position-relative">
@@ -107,17 +108,10 @@
   </div> <!-- End Content -->
 </div> <!-- End d-flex -->
 
-{% comment %} script {% endcomment %}
-<script>
-  // Toggle sidebar
-  document.getElementById('toggle-btn').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
-  });
 
-  // Initialize all toasts
-  const toastElList = [].slice.call(document.querySelectorAll('.toast'));
-  toastElList.map(function(toastEl) {
-    return new bootstrap.Toast(toastEl, { delay: 3000 }).show();
-  });
-</script>
 {% endblock content %}
+
+ {% block extra_js %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+ 
+ {% endblock %}

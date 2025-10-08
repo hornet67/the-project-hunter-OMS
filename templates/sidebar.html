@@ -1,0 +1,69 @@
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar p-3 d-flex flex-column position-relative">
+    <!-- Toggle Button -->
+    <button id="toggle-btn">☰</button>
+
+    <!-- Profile Section -->
+    <div class="profile-section mt-5 mb-3 text-center">
+      <img src="https://via.placeholder.com/70" class="rounded-circle mb-2" alt="Profile">
+      <div class="profile-name">{{ company.company_name }}</div>
+    </div>
+    <hr class="text-secondary">
+
+    <!-- Categories -->
+    <ul class="nav flex-column flex-grow-1">
+      <!-- Administration -->
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#adminDropdown" role="button" aria-expanded="false" aria-controls="adminDropdown">
+          <i class="bi bi-gear"></i> <span>Administration</span>
+        </a>
+        <div class="collapse" id="adminDropdown">
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item"><a class="nav-link" href="{% url 'userrole' %}">User Role</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'branch' %}">Branch</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'userpermissions' %}">Permission</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'userinfo' %}">User Information</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- HR -->
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#hrDropdown" role="button" aria-expanded="false" aria-controls="hrDropdown">
+          <i class="bi bi-people"></i> <span>HR</span>
+        </a>
+        <div class="collapse" id="hrDropdown">
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item"><a class="nav-link" href="#">Employee Info</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Attendance</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- Inventory -->
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-box-seam"></i> <span>Inventory</span></a>
+      </li>
+
+      <!-- Food -->
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#foodDropdown" role="button" aria-expanded="false" aria-controls="foodDropdown">
+          <i class="bi bi-basket"></i> <span>Food</span>
+        </a>
+        <div class="collapse" id="foodDropdown">
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item"><a class="nav-link" href="#">Menu</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Orders</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Logout -->
+    <div class="mt-auto">
+      <hr class="text-secondary">
+      <a class="nav-link text-danger" href="{% url 'logout' %}">
+        <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
+      </a>
+    </div>
+  </div> <!-- End Sidebar -->
