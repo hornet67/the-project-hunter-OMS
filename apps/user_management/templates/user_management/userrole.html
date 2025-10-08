@@ -1,0 +1,72 @@
+{% extends 'auth_system/dashboard.html' %}
+{% load static %}
+
+{% block title %}User Role{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/userrole.css' %}" />
+{% endblock %}
+
+{% block main_content %}
+<div class="container-fluid">
+
+  <!-- Add Role Button -->
+  <div class="mb-3">
+    <button class="btn btn-success" onclick="openAddModal()">
+      + Add Role
+    </button>
+  </div>
+
+  <!-- Modal Form -->
+  <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addRoleModalLabel">Add New Role</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="roleForm">
+            {% csrf_token %}
+            <input type="hidden" id="formAction" value="add">
+            <input type="hidden" id="roleId" value="">
+            <div class="mb-3">
+              <label for="roleName" class="form-label">Role Name</label>
+              <input type="text" class="form-control" id="roleName" name="role" placeholder="Enter role name" required>
+            </div>
+            <button type="submit" class="btn btn-primary" id="roleSubmitBtn">Add Role</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Role Table -->
+  <div class="mt-4">
+    <table class="table table-striped" id="rolesTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Role Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="rolesTableBody">
+        {% for data in datas %}
+        <tr>
+          <td>{{ data.id }}</td>
+          <td>{{ data.role }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning edit-btn" data-id="{{ data.id }}" data-role="{{ data.role }}">Edit</button>
+            <button class="btn btn-sm btn-danger delete-btn" data-id="{{ data.id }}">Delete</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock main_content %}
+
+{% block extra_js %}
+<script src="{% static 'js/userrole.js' %}"></script>
+{% endblock extra_js %}

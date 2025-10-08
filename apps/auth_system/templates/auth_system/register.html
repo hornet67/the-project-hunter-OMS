@@ -85,7 +85,7 @@
   </div>
 </div>
 {% endblock %}
-{% block extra_js %}
+
 <!-- Modal always present -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -129,10 +129,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
-{% endblock %}
 
 
-{% endblock content %}
+
+
 
  {% block extra_js %}
  <script src="{% static 'js/register.js' %}"></script>

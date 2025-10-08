@@ -8,89 +8,25 @@
 
 {% block content %}
 <div class="d-flex" style="min-height: 100vh; position: relative;">
-
   {% include 'sidebar.html' %}
 
   <!-- Main Content -->
-<div class="content flex-grow-1 p-4">
-  <!-- Top bar -->
-  <div class="topbar mb-4 d-flex justify-content-between align-items-center">
-    <h2>Office Management System</h2>
+  <div class="content flex-grow-1 p-4">
+    <!-- Top bar -->
+    <div class="topbar mb-4 d-flex justify-content-between align-items-center">
+      <h2>Office Management System</h2>
 
-    <!-- Search -->
-    <form class="d-flex" role="search" onsubmit="return false;">
-      <input id="searchInput" class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
-      <button class="btn btn-primary" type="submit">Search</button>
-    </form>
-  </div>
-
-  <!-- Add Item Button -->
-  <div class="mb-3">
-    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
-      + Add Item
-    </button>
-  </div>
-
-  <!-- Modal Form -->
-  <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addItemModalLabel">Add New Item</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="addItemForm">
-            <div class="mb-3">
-              <label for="itemName" class="form-label">Item Name</label>
-              <input type="text" class="form-control" id="itemName" placeholder="Enter item name" required>
-            </div>
-            <div class="mb-3">
-              <label for="itemCategory" class="form-label">Category</label>
-              <select class="form-select" id="itemCategory" required>
-                <option value="">Select Category</option>
-                <option value="Administration">Administration</option>
-                <option value="HR">HR</option>
-                <option value="Inventory">Inventory</option>
-                <option value="Food">Food</option>
-              </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Item</button>
-          </form>
-        </div>
-      </div>
+      <!-- Search -->
+      <form class="d-flex" role="search" onsubmit="return false;">
+        <input id="searchInput" class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
     </div>
-  </div>
 
-  <!-- Table for displaying data -->
-  <div class="mt-4">
-    <table class="table table-striped" id="itemsTable">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Item Name</th>
-          <th>Category</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Example row -->
-        <tr>
-          <td>1</td>
-          <td>Example Item</td>
-          <td>Inventory</td>
-          <td>
-            <button class="btn btn-sm btn-warning">Edit</button>
-            <button class="btn btn-sm btn-danger">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-
-
+    <!-- ✅ Replace all inner content with this block -->
+    {% block main_content %}
+    <p>Welcome to the Office Management System dashboard.</p>
+    {% endblock main_content %}
 
     <!-- Toast Container -->
     <div aria-live="polite" aria-atomic="true" class="position-relative">
@@ -107,11 +43,8 @@
     </div>
   </div> <!-- End Content -->
 </div> <!-- End d-flex -->
-
-
 {% endblock content %}
 
- {% block extra_js %}
+{% block extra_js %}
 <script src="{% static 'js/dashboard.js' %}"></script>
- 
- {% endblock %}
+{% endblock %}
