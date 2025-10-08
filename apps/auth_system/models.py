@@ -9,8 +9,7 @@ from django.utils import timezone
 # -------------------------
 class CustomUser(AbstractUser):
     age = models.PositiveIntegerField(
-        null=True, blank=True, validators=[MinValueValidator(18), MaxValueValidator(70)]
-    )
+        null=True, blank=True, validators=[MinValueValidator(18), MaxValueValidator(70)])
     phone_number = models.CharField(max_length=11, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
 
@@ -32,11 +31,11 @@ class CompanyType(models.Model):
 # Pending Company Info
 # -------------------------
 class PendingCompany(models.Model):
-    company_id = models.AutoField(primary_key=True, unique=True)
-    company_name = models.CharField(max_length=300,unique=True)
-    email = models.EmailField(max_length=254,unique=True)
+    id = models.AutoField(primary_key=True)  # <-- change here
+    company_name = models.CharField(max_length=300, unique=True)
+    email = models.EmailField(max_length=254, unique=True)
     phone_number = models.CharField(max_length=11, blank=True)
-    type = models.ForeignKey(CompanyType, on_delete=models.CASCADE)
+    type = models.ForeignKey(CompanyType, on_delete=models.CASCADE, null=True, blank=True)
     address = models.TextField()
     website = models.URLField(max_length=200, blank=True)
     domain = models.CharField(max_length=100, blank=True)
@@ -53,7 +52,7 @@ class CompanyInfo(models.Model):
     company_name = models.CharField(max_length=300)
     email = models.EmailField(max_length=254)
     phone_number = models.CharField(max_length=11, blank=True)
-    type = models.ForeignKey(CompanyType, on_delete=models.CASCADE)
+    type = models.ForeignKey(CompanyType, on_delete=models.CASCADE,null=True)
     address = models.TextField()
     website = models.URLField(max_length=200, blank=True)
     domain = models.CharField(max_length=100, blank=True)

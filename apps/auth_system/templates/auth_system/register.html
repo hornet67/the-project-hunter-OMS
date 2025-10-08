@@ -1,96 +1,132 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-  Register page
-{% endblock title %}
+{% block title %}Company Registration{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+<link rel="stylesheet" href="{% static 'css/register.css' %}" />
+<style>
+/* Optional: Modal size for message popup */
+#messageModal .modal-dialog {
+    max-width: 400px;
+}
+</style>
 {% endblock %}
 
-
 {% block content %}
-<div class="container">
+<div class="container py-5">
   <div class="row justify-content-center">
-    <div class="col-lg-5 col-md-7">
-      <div class="card">
+    <div class="col-lg-6 col-md-8">
+      <div class="card shadow-lg">
         <div class="card-header text-white text-center bg-primary">
           <h4><i class="bi bi-building"></i> Company Registration</h4>
         </div>
         <div class="card-body p-4">
-          <form method="post">
+
+          <form method="post" action="{% url 'register' %}">
             {% csrf_token %}
 
-            <!-- Company Name -->
             <div class="mb-3">
               <label class="form-label">Company Name</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-building"></i></span>
-                <input type="text" name="company_name" class="form-control" placeholder="Enter company name" required />
+                <input type="text" name="company_name" value="{{ data.company_name }}" class="form-control" placeholder="Enter company name" required />
               </div>
             </div>
 
-            <!-- Email -->
             <div class="mb-3">
               <label class="form-label">Email</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" name="email" class="form-control" placeholder="Enter company email" required />
+                <input type="email" name="email" value="{{ data.email }}" class="form-control" placeholder="Enter company email" required />
               </div>
             </div>
 
-            <!-- Phone -->
             <div class="mb-3">
               <label class="form-label">Phone Number</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                <input type="text" name="phone_number" class="form-control" placeholder="Enter phone number" />
+                <input type="text" name="phone_number" value="{{ data.phone_number }}" class="form-control" placeholder="Enter phone number" required />
               </div>
             </div>
 
-           
-          
-           <!-- Website -->
-          <div class="mb-3">
-            <label class="form-label">Website</label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-globe"></i></span>
-              <input type="url" name="website" class="form-control" placeholder="Enter website" />
+            <div class="mb-3">
+              <label class="form-label">Website</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-globe"></i></span>
+                <input type="url" name="website" value="{{ data.website }}" class="form-control" placeholder="Enter website URL" required />
+              </div>
             </div>
-          </div>
 
-          <!-- Domain -->
-          <div class="mb-3">
-            <label class="form-label">Domain</label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-server"></i></span>
-              <input type="text" name="domain" class="form-control" placeholder="Enter domain" />
+            <div class="mb-3">
+              <label class="form-label">Domain</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-server"></i></span>
+                <input type="text" name="domain" value="{{ data.domain }}" class="form-control" placeholder="Enter company domain" required />
+              </div>
             </div>
-          </div>
 
-
-         
-
-            <!-- Submit -->
             <div class="d-grid mt-4">
               <button type="submit" class="btn btn-success">
                 <i class="bi bi-person-plus"></i> Register
               </button>
             </div>
 
-            <!-- Login Link -->
-            <div class="col-12 mt-2 text-center">
+            <div class="col-12 mt-3 text-center">
               <a href="{% url 'login' %}" class="btn btn-outline-secondary w-50">
                 <i class="bi bi-box-arrow-in-right"></i> Already have an account? Login
               </a>
             </div>
           </form>
+
         </div>
       </div>
     </div>
   </div>
 </div>
+{% endblock %}
+{% block extra_js %}
+<!-- Modal always present -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4">
+      <div class="modal-body" id="modal-body-content">
+        <!-- Content filled by JS -->
+      </div>
+    </div>
+  </div>
+</div>
 
-{% endblock content %}
-  
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const messages = {{ messages_list|default:"[]"|safe }};
+  if (messages.length > 0) {
+    const modalBody = document.getElementById("modal-body-content");
+    modalBody.innerHTML = "";
+
+    messages.forEach(message => {
+      let icon = "";
+      if (message.tag === "success") icon = '<div class="text-success mb-3"><i class="bi bi-check-circle-fill fs-1"></i></div>';
+      else if (message.tag === "warning") icon = '<div class="text-warning mb-3"><i class="bi bi-exclamation-triangle-fill fs-1"></i></div>';
+      else if (message.tag === "error") icon = '<div class="text-danger mb-3"><i class="bi bi-x-circle-fill fs-1"></i></div>';
+
+      modalBody.innerHTML += icon + `<h5>${message.text}</h5>`;
+    });
+
+    const modalEl = document.getElementById('messageModal');
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+
+    // Auto close and redirect if success
+    setTimeout(() => {
+      modal.hide();
+      messages.forEach(msg => {
+        if (msg.tag === "success") {
+          window.location.href = "{% url 'login' %}";
+        }
+      });
+    }, 3000);
+  }
+});
+</script>
+{% endblock %}

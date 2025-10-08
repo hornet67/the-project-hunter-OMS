@@ -34,12 +34,9 @@ class CompanyInfoAdmin(admin.ModelAdmin):
     list_filter = ('type', 'is_active')
 
 
-# -------------------------
-# Pending Company
-# -------------------------
 @admin.register(PendingCompany)
 class PendingCompanyAdmin(admin.ModelAdmin):
-    list_display = ('company_id', 'company_name', 'email', 'phone_number', 'type', 'activate_button', 'delete_button')
+    list_display = ('id', 'company_name', 'email', 'phone_number', 'type', 'activate_button', 'delete_button')
     search_fields = ('company_name', 'email')
     list_filter = ('type',)
 
@@ -47,7 +44,7 @@ class PendingCompanyAdmin(admin.ModelAdmin):
     def activate_button(self, obj):
         return format_html(
             '<a class="button" href="{}">Activate</a>',
-            f'activate/{obj.company_id}/'
+            f'activate/{obj.id}/'  # changed company_id → id
         )
     activate_button.short_description = 'Activate Company'
 
@@ -55,7 +52,7 @@ class PendingCompanyAdmin(admin.ModelAdmin):
     def delete_button(self, obj):
         return format_html(
             '<a class="button" href="{}">Delete</a>',
-            f'delete/{obj.company_id}/'
+            f'delete/{obj.id}/'  # changed company_id → id
         )
     delete_button.short_description = 'Delete Company'
 
@@ -68,8 +65,7 @@ class PendingCompanyAdmin(admin.ModelAdmin):
         ]
         return custom_urls + urls
 
-    
-        # Activate company
+    # Activate company
     def activate_company(self, request, pending_company_id):
         activating_user = request.user
         company_info = activate_pending_company(pending_company_id, activating_user)
@@ -83,9 +79,6 @@ class PendingCompanyAdmin(admin.ModelAdmin):
         pending_company.delete()
         self.message_user(request, f'Pending company "{name}" has been deleted.', level='warning')
         return redirect('/admin/auth_system/pendingcompany/')
-
-
-
 
 
 
