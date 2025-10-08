@@ -4,58 +4,86 @@
 {% block title %}Dashboard{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
-<style>
-</style>
 {% endblock %}
+
 {% block content %}
-<div class="d-flex">
+<div class="d-flex" style="min-height: 100vh; position: relative;">
   <!-- Sidebar -->
-  <div id="sidebar" class="sidebar p-3">
-    <div>
-      <!-- Toggle Button -->
-      <div class="text-end mb-3">
-        <button id="toggle-btn" class="btn btn-outline-light btn-sm">☰</button>
-      </div>
+  <div id="sidebar" class="sidebar p-3 d-flex flex-column position-relative">
+    <!-- Toggle Button -->
+    <button id="toggle-btn">☰</button>
 
-      <!-- Profile -->
-      <div class="profile-section">
-        <img src="https://via.placeholder.com/70" alt="Profile">
-        <div class="profile-name mt-2">John Doe</div>
-      </div>
-      <hr class="text-secondary">
-
-      <!-- Menu -->
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link active" href="#"><i class="bi bi-gear"></i> <span>Administration</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-people"></i> <span>HR</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-box-seam"></i> <span>Inventory</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-basket"></i> <span>Food</span></a>
-        </li>
-      </ul>
+    <!-- Profile Section -->
+    <div class="profile-section mt-5 mb-3 text-center">
+      <img src="https://via.placeholder.com/70" class="rounded-circle mb-2" alt="Profile">
+      <div class="profile-name">{{ company.company_name }}</div>
     </div>
+    <hr class="text-secondary">
+
+    <!-- Categories -->
+    <ul class="nav flex-column flex-grow-1">
+      <!-- Administration -->
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#adminDropdown" role="button" aria-expanded="false" aria-controls="adminDropdown">
+          <i class="bi bi-gear"></i> <span>Administration</span>
+        </a>
+        <div class="collapse" id="adminDropdown">
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item"><a class="nav-link" href="{% url 'userrole' %}">User Role</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'branch' %}">Branch</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'userpermissions' %}">Permission</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'userinfo' %}">User Information</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- HR -->
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#hrDropdown" role="button" aria-expanded="false" aria-controls="hrDropdown">
+          <i class="bi bi-people"></i> <span>HR</span>
+        </a>
+        <div class="collapse" id="hrDropdown">
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item"><a class="nav-link" href="#">Employee Info</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Attendance</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- Inventory -->
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-box-seam"></i> <span>Inventory</span></a>
+      </li>
+
+      <!-- Food -->
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#foodDropdown" role="button" aria-expanded="false" aria-controls="foodDropdown">
+          <i class="bi bi-basket"></i> <span>Food</span>
+        </a>
+        <div class="collapse" id="foodDropdown">
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item"><a class="nav-link" href="#">Menu</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Orders</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
 
     <!-- Logout -->
-    <div>
+    <div class="mt-auto">
       <hr class="text-secondary">
       <a class="nav-link text-danger" href="{% url 'logout' %}">
         <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
       </a>
     </div>
-  </div>
+  </div> <!-- End Sidebar -->
 
-  <!-- Content -->
+  <!-- Main Content -->
   <div class="content flex-grow-1 p-4">
     <!-- Top bar -->
-    <div class="topbar mb-4">
+    <div class="topbar mb-4 position-relative">
       <h2>Office Management System</h2>
-      <form class="d-flex position-absolute end-0" role="search">
+      <form class="d-flex position-absolute end-0 top-0" role="search">
         <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
         <button class="btn btn-primary" type="submit">Search</button>
       </form>
@@ -69,32 +97,27 @@
         {% for message in messages %}
         <div class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="d-flex">
-            <div class="toast-body">
-              {{ message }}
-            </div>
+            <div class="toast-body">{{ message }}</div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>
         </div>
         {% endfor %}
       </div>
     </div>
-
-  </div>
-</div>
+  </div> <!-- End Content -->
+</div> <!-- End d-flex -->
 
 {% comment %} script {% endcomment %}
 <script>
+  // Toggle sidebar
   document.getElementById('toggle-btn').addEventListener('click', function() {
     document.getElementById('sidebar').classList.toggle('collapsed');
   });
 
-  // Initialize all toasts (optional auto-hide)
+  // Initialize all toasts
   const toastElList = [].slice.call(document.querySelectorAll('.toast'));
-  toastElList.map(function (toastEl) {
-    return new bootstrap.Toast(toastEl, { delay: 3000 }).show(); // auto-hide after 3s
+  toastElList.map(function(toastEl) {
+    return new bootstrap.Toast(toastEl, { delay: 3000 }).show();
   });
 </script>
-
 {% endblock content %}
-
-

@@ -57,3 +57,38 @@ body {
       margin: 0;
       text-align: center;
     }
+
+
+  /* Sidebar collapsed style */
+  #sidebar {
+    width: 250px;
+    transition: width 0.3s;
+    background-color: #111; /* Dark sidebar */
+    color: #fff;
+  }
+  #sidebar.collapsed {
+    width: 60px;
+  }
+  #sidebar.collapsed .nav-link span,
+  #sidebar.collapsed .profile-name {
+    display: none;
+  }
+
+  /* Profile image */
+  .profile-section img {
+    width: 70px;
+    height: 70px;
+  }
+
+  /* Toggle button inside sidebar, top-right */
+  #toggle-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1050;
+    background-color: #f8f9fa; /* light button */
+    color: #111;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
