@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+<style>
+</style>
+{% endblock %}
+{% block content %}
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar p-3">
+    <div>
+      <!-- Toggle Button -->
+      <div class="text-end mb-3">
+        <button id="toggle-btn" class="btn btn-outline-light btn-sm">☰</button>
+      </div>
+
+      <!-- Profile -->
+      <div class="profile-section">
+        <img src="https://via.placeholder.com/70" alt="Profile">
+        <div class="profile-name mt-2">John Doe</div>
+      </div>
+      <hr class="text-secondary">
+
+      <!-- Menu -->
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#"><i class="bi bi-gear"></i> <span>Administration</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-people"></i> <span>HR</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-box-seam"></i> <span>Inventory</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-basket"></i> <span>Food</span></a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Logout -->
+    <div>
+      <hr class="text-secondary">
+      <a class="nav-link text-danger" href="{% url 'logout' %}">
+        <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content flex-grow-1 p-4">
+    <!-- Top bar -->
+    <div class="topbar mb-4">
+      <h2>Office Management System</h2>
+      <form class="d-flex position-absolute end-0" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
+    </div>
+
+    <p>Welcome to the Office Management System dashboard.</p>
+
+    <!-- Toast Container -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+      <div class="toast-container position-fixed top-0 end-0 p-3">
+        {% for message in messages %}
+        <div class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">
+              {{ message }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% comment %} script {% endcomment %}
+<script>
+  document.getElementById('toggle-btn').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+  });
+
+  // Initialize all toasts (optional auto-hide)
+  const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+  toastElList.map(function (toastEl) {
+    return new bootstrap.Toast(toastEl, { delay: 3000 }).show(); // auto-hide after 3s
+  });
+</script>
+
+{% endblock content %}
+
+
