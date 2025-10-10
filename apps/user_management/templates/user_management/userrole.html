@@ -9,30 +9,41 @@
 {% block main_content %}
 <div class="container-fluid">
 
+  {% comment %} <!-- Flash Messages -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %} {% endcomment %}
+
   <!-- Add Role Button -->
   <div class="mb-3">
-    <button class="btn btn-success" onclick="openAddModal()">
-      + Add Role
-    </button>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#roleModal"
+      onclick="openAddModal()">+ Add Role</button>
   </div>
 
   <!-- Modal Form -->
-  <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addRoleModalLabel">Add New Role</h5>
+          <h5 class="modal-title" id="roleModalLabel">Add New Role</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="roleForm">
+          <form method="POST">
             {% csrf_token %}
-            <input type="hidden" id="formAction" value="add">
-            <input type="hidden" id="roleId" value="">
+            <input type="hidden" name="action" id="formAction" value="create">
+            <input type="hidden" name="id" id="roleId">
+
             <div class="mb-3">
               <label for="roleName" class="form-label">Role Name</label>
               <input type="text" class="form-control" id="roleName" name="role" placeholder="Enter role name" required>
             </div>
+
             <button type="submit" class="btn btn-primary" id="roleSubmitBtn">Add Role</button>
           </form>
         </div>
@@ -42,7 +53,7 @@
 
   <!-- Role Table -->
   <div class="mt-4">
-    <table class="table table-striped" id="rolesTable">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>ID</th>
@@ -50,14 +61,25 @@
           <th>Action</th>
         </tr>
       </thead>
-      <tbody id="rolesTableBody">
+      <tbody>
         {% for data in datas %}
         <tr>
           <td>{{ data.id }}</td>
           <td>{{ data.role }}</td>
           <td>
-            <button class="btn btn-sm btn-warning edit-btn" data-id="{{ data.id }}" data-role="{{ data.role }}">Edit</button>
-            <button class="btn btn-sm btn-danger delete-btn" data-id="{{ data.id }}">Delete</button>
+            <!-- Edit Button -->
+            <button type="button" class="btn btn-sm btn-warning"
+              data-bs-toggle="modal" data-bs-target="#roleModal"
+              onclick="openEditModal('{{ data.id }}', '{{ data.role }}')">Edit</button>
+
+            <!-- Delete Form -->
+            <form method="POST" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="id" value="{{ data.id }}">
+              <button type="submit" class="btn btn-sm btn-danger"
+                onclick="return confirm('Delete this role?')">Delete</button>
+            </form>
           </td>
         </tr>
         {% endfor %}
@@ -65,8 +87,25 @@
     </table>
   </div>
 </div>
+
 {% endblock main_content %}
 
 {% block extra_js %}
-<script src="{% static 'js/userrole.js' %}"></script>
+<script>
+  function openAddModal() {
+    document.getElementById('roleModalLabel').innerText = 'Add New Role';
+    document.getElementById('formAction').value = 'create';
+    document.getElementById('roleId').value = '';
+    document.getElementById('roleName').value = '';
+    document.getElementById('roleSubmitBtn').innerText = 'Add Role';
+  }
+
+  function openEditModal(id, roleName) {
+    document.getElementById('roleModalLabel').innerText = 'Edit Role';
+    document.getElementById('formAction').value = 'update';
+    document.getElementById('roleId').value = id;
+    document.getElementById('roleName').value = roleName;
+    document.getElementById('roleSubmitBtn').innerText = 'Update Role';
+  }
+</script>
 {% endblock extra_js %}

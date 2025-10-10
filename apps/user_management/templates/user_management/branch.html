@@ -1,0 +1,127 @@
+{% extends 'auth_system/dashboard.html' %}
+{% load static %}
+
+{% block title %}Branch Management{% endblock %}
+
+{% block main_content %}
+<div class="container-fluid">
+
+  {% comment %} <!-- Flash Messages -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %} {% endcomment %}
+
+  <!-- Add Branch Button -->
+  <div class="mb-3">
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#branchModal" onclick="openAddModal()">+ Add Branch</button>
+  </div>
+
+  <!-- Branch Modal -->
+  <div class="modal fade" id="branchModal" tabindex="-1" aria-labelledby="branchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="branchModalLabel">Add New Branch</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="action" id="formAction" value="create">
+            <input type="hidden" name="id" id="branchId">
+
+            <div class="mb-3">
+              <label for="storeName" class="form-label">Store Name</label>
+              <input type="text" class="form-control" id="storeName" name="store_name" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="division" class="form-label">Division</label>
+              <input type="text" class="form-control" id="division" name="division" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="location" class="form-label">Location</label>
+              <input type="text" class="form-control" id="location" name="location">
+            </div>
+
+            <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <textarea class="form-control" id="address" name="address"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="branchSubmitBtn">Add Branch</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branch Table -->
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Store Name</th>
+        <th>Division</th>
+        <th>Location</th>
+        <th>Address</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data in datas %}
+      <tr>
+        <td>{{ data.id }}</td>
+        <td>{{ data.store_name }}</td>
+        <td>{{ data.division }}</td>
+        <td>{{ data.location }}</td>
+        <td>{{ data.address }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#branchModal"
+            onclick="openEditModal('{{ data.id }}', '{{ data.store_name }}', '{{ data.division }}', '{{ data.location }}', '{{ data.address }}')">Edit</button>
+
+          <form method="POST" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" value="{{ data.id }}">
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this branch?')">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock main_content %}
+
+{% block extra_js %}
+<script>
+  function openAddModal() {
+    document.getElementById('branchModalLabel').innerText = 'Add New Branch';
+    document.getElementById('formAction').value = 'create';
+    document.getElementById('branchId').value = '';
+    document.getElementById('storeName').value = '';
+    document.getElementById('division').value = '';
+    document.getElementById('location').value = '';
+    document.getElementById('address').value = '';
+    document.getElementById('branchSubmitBtn').innerText = 'Add Branch';
+  }
+
+  function openEditModal(id, store, division, location, address) {
+    document.getElementById('branchModalLabel').innerText = 'Edit Branch';
+    document.getElementById('formAction').value = 'update';
+    document.getElementById('branchId').value = id;
+    document.getElementById('storeName').value = store;
+    document.getElementById('division').value = division;
+    document.getElementById('location').value = location;
+    document.getElementById('address').value = address;
+    document.getElementById('branchSubmitBtn').innerText = 'Update Branch';
+  }
+</script>
+{% endblock extra_js %}
